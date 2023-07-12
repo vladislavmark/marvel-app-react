@@ -10,11 +10,19 @@ class RandomChar extends Component {
     }
 
     state = {
+        // name: null,
+        // description: null,
+        // thumbnail: null,
+        // homepage: null,
+        // wiki: null,
+
+        // передаємо пустий обєкт якщо будуть інші додаткові поля
         char: {}
     }
 
     marvelService = new MarvelService();
 
+    // винесли для оптимізації
     onCharLoaded = (char) => {
         this.setState({ char })
     }
