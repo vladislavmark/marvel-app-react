@@ -27,6 +27,7 @@ class RandomChar extends Component {
 
     // при монтуванні викликаємо запит
     componentDidMount() {
+        // this.tot.foo = 1; // test <ErrorBoundary>
         this.updateChar();
     }
 
