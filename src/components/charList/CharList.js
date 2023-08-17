@@ -12,7 +12,7 @@ class CharList extends Component {
         loading: true,
         error: false,
         loadingMore: false,
-        offset: 200,
+        offset: 210,
         charEnded: false,
     }
 
@@ -24,8 +24,7 @@ class CharList extends Component {
 
     onRequest = (offset) => {
         this.onCharLoading();
-        this.marvelService
-            .getAllCharacters(offset)
+        this.marvelService.getAllCharacters(offset)
             .then(this.onCharListLoaded)
             .catch(this.onError)
     }
@@ -83,7 +82,7 @@ class CharList extends Component {
         const elements = this.renderItems(charList);
         const errorMessage = error ? <ErrorMessage /> : null;
         const spinner = loading ? <Spinner /> : null;
-        const content = !(error || loading) ? elements : null;
+        const content = !(loading || error) ? elements : null;
 
         return (
             <div className="char__list" >
