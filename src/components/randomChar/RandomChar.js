@@ -39,6 +39,7 @@ class RandomChar extends Component {
         })
     }
 
+    // show spinner
     onCharLoading = (char) => {
         this.setState({
             loading: true
