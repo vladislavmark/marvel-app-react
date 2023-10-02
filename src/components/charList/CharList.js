@@ -65,7 +65,13 @@ class CharList extends Component {
                 imageStyle = { 'objectFit': 'contain' };
             }
             return (
-                <li className="char__item" key={item.id} onClick={() => this.props.onCharSelected(item.id)}>
+                <li
+                    className="char__item"
+                    tabIndex={0}
+                    key={item.id}
+                    onClick={() => {
+                        this.props.onCharSelected(item.id);
+                    }}>
                     <img src={item.thumbnail} alt={item.name} style={imageStyle} />
                     <div className="char__name">{item.name}</div>
                 </li>
