@@ -1,7 +1,7 @@
-import { Component, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
@@ -9,8 +9,8 @@ import './charList.scss';
 
 const CharList = (props) => {
     const [charList, setCharList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
     const [offset, setOffset] = useState(210);
     const [charEnded, setCharEnded] = useState(false);
@@ -25,22 +25,19 @@ const CharList = (props) => {
     //     charEnded: false,
     // }
 
-    const marvelService = new MarvelService();
+    const { loading, error, getAllCharacters } = useMarvelService();
 
     useEffect(() => {
-        onRequest();
+        onRequest(offset, true);
     }, [])
 
 
-    const onRequest = (offset) => {
-        onCharLoading();
-        marvelService.getAllCharacters(offset)
-            .then(onCharListLoaded)
-            .catch(onError)
-    }
+    const onRequest = (offset, initial) => {
+        initial ? setLoadingMore(false) : setLoadingMore(true)
 
-    const onCharLoading = () => {
-        setLoadingMore();
+        getAllCharacters(offset)
+            .then(onCharListLoaded)
+        // .catch(onError)
     }
 
     const onCharListLoaded = (newCharList) => {
@@ -58,20 +55,20 @@ const CharList = (props) => {
         // }))
 
         setCharList(charList => [...charList, ...newCharList]);
-        setLoading(loading => false);
+        // setLoading(loading => false);
         setLoadingMore(loadingMore => false);
         setOffset(offset => offset + 9);
         setCharEnded(charEnded => ended);
     }
 
-    const onError = () => {
-        // this.setState({
-        //     error: true,
-        //     loading: false,
-        // })
-        setError(error => true);
-        setLoading(loading => false);
-    }
+    // const onError = () => {
+    //     // this.setState({
+    //     //     error: true,
+    //     //     loading: false,
+    //     // })
+    //     setError(error => true);
+    //     setLoading(loading => false);
+    // }
 
     const itemRefs = useRef([]);
 
@@ -126,14 +123,14 @@ const CharList = (props) => {
     // const { charList, loading, error, offset, loadingMore, charEnded } = this.state;
     const elements = renderItems(charList);
     const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error) ? elements : null;
+    const spinner = loading && !loadingMore ? <Spinner /> : null;
+    // const content = !(loading || error) ? elements : null;
 
     return (
         <div className="char__list" >
             {errorMessage}
             {spinner}
-            {content}
+            {elements}
             <button className="button button__main button__long"
                 disabled={loadingMore}
                 style={{ 'display': charEnded ? 'none' : 'block' }}
